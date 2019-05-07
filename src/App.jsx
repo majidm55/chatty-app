@@ -35,6 +35,15 @@ class App extends Component {
       this.setState({messages: messages})
     }, 3000);
   }
+  changeText = (text) => {
+    const newText = {
+      username :this.state.currentUser.name,
+      content : text
+    };
+  
+  const newTextState = this.state.messages.push(newText);
+    this.setState({ newTextState });
+  }
   changeStateName = (info) => {
     this.setState({currentUser: {name: info}})
   }
@@ -43,7 +52,7 @@ class App extends Component {
       <div><nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
-      <ChatBar currentUser ={this.state.currentUser.name} changeStateName = {this.changeStateName}/>
+      <ChatBar currentUser ={this.state.currentUser.name} changeStateName = {this.changeStateName} changeText ={this.changeText}/>
       <MessageList messages = {this.state.messages}/>
       </div>
     );
