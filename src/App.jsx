@@ -35,13 +35,15 @@ class App extends Component {
       this.setState({messages: messages})
     }, 3000);
   }
-  
+  changeStateName = (info) => {
+    this.setState({currentUser: {name: info}})
+  }
   render() {
     return (
       <div><nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
-      <ChatBar currentUser ={this.state.currentUser.name} />
+      <ChatBar currentUser ={this.state.currentUser.name} changeStateName = {this.changeStateName}/>
       <MessageList messages = {this.state.messages}/>
       </div>
     );
