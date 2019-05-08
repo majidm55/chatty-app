@@ -22,8 +22,14 @@ class App extends Component {
         }
       ]
     };
+    
+    this.socket = new WebSocket('ws://localhost:3001');
+
   }
   componentDidMount() {
+    this.socket.onopen = () => {
+      console.log('Browser client connected');
+    };
     console.log("componentDidMount <App />");
     setTimeout(() => {
       console.log("Simulating incoming message");
@@ -35,18 +41,27 @@ class App extends Component {
       this.setState({messages: messages})
     }, 3000);
   }
+
+
   changeText = (text) => {
     const newText = {
       username :this.state.currentUser.name,
-      content : text
+      content : text,
+      id: this.state.messages.length +1
     };
   
   const newTextState = this.state.messages.push(newText);
+  this.socket.send(JSON.stringify(newText));
+
     this.setState({ newTextState });
   }
+
+
   changeStateName = (info) => {
     this.setState({currentUser: {name: info}})
   }
+
+
   render() {
     return (
       <div><nav className="navbar">
