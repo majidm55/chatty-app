@@ -10,7 +10,8 @@ class App extends Component {
     this.state = {
       currentUser:"Anon" , // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
-      oldUser:""
+      oldUser:"",
+      users: 0 //// clientss//
     };
   
 
@@ -23,7 +24,9 @@ class App extends Component {
     };
 ////receieving data from server
     this.socket.onmessage = (event) => {
-      console.log("data getting displayed",event)
+      if (event.data == parseInt(event.data)) {
+        return this.setState({ users: event.data });
+      }
 
       let data= JSON.parse(event.data);
       let newMessageItem ={}
@@ -86,6 +89,9 @@ class App extends Component {
     return (
       <div><nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
+        <span className="navbar-users">
+        {this.state.users} users online
+        </span>
       </nav>
         <ChatBar currentUser={this.state.currentUser} changeStateName={this.changeStateName} changeText={this.changeText} />
         <MessageList messages={this.state.messages} oldUser ={this.state.oldUser} currentUser = {this.state.currentUser} />
