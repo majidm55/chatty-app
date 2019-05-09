@@ -8,40 +8,77 @@ class App extends Component {
     super(props);
     // this is the *only* time you should assign directly to state:
     this.state = {
-      currentUser: { name: "Bob" }, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
+      currentUser:"Anon" , // optional. if currentUser is not defined, it means the user is Anonymous
+      messages: [],
+      oldUser:""
     };
   
-    this.socket = new WebSocket('ws://localhost:3001');
 
   }
   componentDidMount() {
+    this.socket = new WebSocket('ws://localhost:3001');
+    
     this.socket.onopen = () => {
       console.log('Browser client connected');
     };
-
+////receieving data from server
     this.socket.onmessage = (event) => {
-      let newstate = this.state.messages;
-      newstate.push(JSON.parse(event.data))
-      console.log(event.data);
-      this.setState({ messages: newstate })
+      console.log("data getting displayed",event)
+
+      let data= JSON.parse(event.data);
+      let newMessageItem ={}
+      let oldMessages;
+      let newMessages;
+      switch(data.type) {
+
+        case 'incomingMessage' :
+          newMessageItem.username = data.username;
+          newMessageItem.content = data.content;
+          newMessageItem.id = data.id;
+          oldMessages = this.state.messages;
+          newMessages = [...oldMessages, newMessageItem];
+          this.setState({messages: newMessages});   
+          break;
+        case 'incomingNotification' :
+          newMessageItem.content = data.content;
+          newMessageItem.id = data.id;
+          oldMessages = this.state.messages;
+          newMessages = [...oldMessages, newMessageItem];
+          this.setState({messages: newMessages});    
+          break;
+       
+        default:
+          throw new Error('Unknown event type ' + data.type);
+      }
+
+    
     }
   }
 
-
+///sening data to server
   changeText = (text) => {
     const newText = {
-      username: this.state.currentUser.name,
+      username: this.state.currentUser,
       content: text,
-      id: this.state.messages.length + 1
+      type: "postMessage"
     };
     this.socket.send(JSON.stringify(newText));
 
   }
 
-
+///change user name,sende data to server//
   changeStateName = (info) => {
-    this.setState({ currentUser: { name: info } })
+    const oldUser = this.state.currentUser;
+    let msgNote = {
+      type: "postNotification",
+      oldUser: oldUser,
+      newUser: info
+    }
+    this.setState({ currentUser: info ,
+                    oldUser: oldUser})
+
+    this.socket.send(JSON.stringify(msgNote));
+
   }
 
 
@@ -50,8 +87,8 @@ class App extends Component {
       <div><nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
-        <ChatBar currentUser={this.state.currentUser.name} changeStateName={this.changeStateName} changeText={this.changeText} />
-        <MessageList messages={this.state.messages} />
+        <ChatBar currentUser={this.state.currentUser} changeStateName={this.changeStateName} changeText={this.changeText} />
+        <MessageList messages={this.state.messages} oldUser ={this.state.oldUser} currentUser = {this.state.currentUser} />
       </div>
     );
   }
