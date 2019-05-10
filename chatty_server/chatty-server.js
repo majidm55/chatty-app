@@ -44,6 +44,8 @@ wss.broadcast = function broadcast(data) {
     switch (parsedMsg.type) {
       case 'postMessage':
         parsedMsg.type = 'incomingMessage';
+        console.log(parsedMsg);
+
         break;
       case 'postNotification':
         parsedMsg.type = 'incomingNotification';

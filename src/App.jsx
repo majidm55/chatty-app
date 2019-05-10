@@ -44,11 +44,14 @@ class App extends Component {
           this.setState({messages: newMessages});   
           break;
         case 'incomingNotification' :
-          newMessageItem.content = data.newUser;
+          newMessageItem.username = data.newUser;
           newMessageItem.id = data.id;
+          newMessageItem.oldUser = data.oldUser;
           newMessageItem.type = "incomingNotification";
           oldMessages = this.state.messages;
           newMessages = [...oldMessages, newMessageItem];
+					console.log("TCL: App -> this.socket.onmessage -> newMessages", newMessages)
+          
           this.setState({messages: newMessages});    
           break;
        
@@ -79,15 +82,18 @@ class App extends Component {
       oldUser: oldUser,
       newUser: info
     }
+    this.socket.send(JSON.stringify(msgNote));
+
     this.setState({ currentUser: info ,
                     oldUser: oldUser})
 
-    this.socket.send(JSON.stringify(msgNote));
 
   }
 
 
   render() {
+    console.log(this.state.messages);
+
     return (
       <div><nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
@@ -96,7 +102,7 @@ class App extends Component {
         </span>
       </nav>
         <ChatBar currentUser={this.state.currentUser} changeStateName={this.changeStateName} changeText={this.changeText} />
-        <MessageList messages={this.state.messages} oldUser ={this.state.oldUser} currentUser = {this.state.currentUser} />
+        <MessageList messages={this.state.messages} />
       </div>
     );
   }
