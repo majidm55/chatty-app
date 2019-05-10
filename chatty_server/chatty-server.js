@@ -27,7 +27,7 @@ wss.on('connection', (ws) => {
 
     ws.on('message', (newText) => {
     let parsedMsg = JSON.parse(newText)
-    parsedMsg.id = UUID;
+    parsedMsg.id = UUID();
     
 
     switch (parsedMsg.type) {
@@ -36,9 +36,9 @@ wss.on('connection', (ws) => {
         break;
       case 'postNotification':
         parsedMsg.type = 'incomingNotification';
+        console.log(parsedMsg);
         break;
     }
-    // console.log("User",parsedMsg.username,"said",parsedMsg.content,"type",parsedMsg.type);
     
     wss.clients.forEach(function  (client){
       if (client.readyState === WebSocket.OPEN) {

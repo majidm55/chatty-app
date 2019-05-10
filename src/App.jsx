@@ -89,8 +89,8 @@ class App extends Component {
     return (
       <div><nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
-        <span className="navbar-users">
-        {this.state.users} users online
+        <span className="navbar-users"> Users online : 
+         {this.state.users} 
         </span>
       </nav>
         <ChatBar currentUser={this.state.currentUser} changeStateName={this.changeStateName} changeText={this.changeText} />
