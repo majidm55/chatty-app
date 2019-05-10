@@ -38,13 +38,15 @@ class App extends Component {
           newMessageItem.username = data.username;
           newMessageItem.content = data.content;
           newMessageItem.id = data.id;
+          newMessageItem.type = "incomingMessage";
           oldMessages = this.state.messages;
           newMessages = [...oldMessages, newMessageItem];
           this.setState({messages: newMessages});   
           break;
         case 'incomingNotification' :
-          newMessageItem.content = data.content;
+          newMessageItem.content = data.newUser;
           newMessageItem.id = data.id;
+          newMessageItem.type = "incomingNotification";
           oldMessages = this.state.messages;
           newMessages = [...oldMessages, newMessageItem];
           this.setState({messages: newMessages});    
