@@ -29,8 +29,6 @@ node chatty-server.js --- to start the websocket server on http://localhost:3001
 
 ```
 
-
-
 ### Dependencies
 * ReactJS
 * Parcel
