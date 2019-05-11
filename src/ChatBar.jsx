@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 class ChatBar extends Component {
     render() {
 
+///ADDING MESSAGE FROM CHAT BAR ///////
       const addText = evt => {
         if(evt.key === 'Enter'){
         let newText = evt.target.value
@@ -11,7 +12,7 @@ class ChatBar extends Component {
         this.props.changeText(newText); 
       }
     }
-
+/////CHANGING USERNAME FROM CHAT BAR////////
       const changeUserInfo = evt => {
         if(evt.key === 'Enter'){
         let newValue = evt.target.value;
